@@ -43,7 +43,6 @@ public class GameManager : MonoBehaviour
     {
         var localPlayer = MatrixFightingPlace[0, 0];
         PKnightPrefab.transform.position = localPlayer.transform.position;
-        PKnightPrefab.GetComponent<Character>().CharacterParty = Character.Party.Player;
         PKnightPrefab.GetComponent<Character>().Coordinate = new Vector2(0, 0);
         localPlayer.transform.GetComponent<Pedestal>().PlayerO = Pedestal.Player.Player;
 
@@ -100,7 +99,6 @@ public class GameManager : MonoBehaviour
                 //Debug.Log("You selected the " + hit.transform.name); // ensure you picked right object
             }
         }
-
         if (currentTurn == Turn.Player)
         {
             SetActiveAttackRange();
@@ -123,36 +121,41 @@ public class GameManager : MonoBehaviour
             uint attackRange = characterTmp.RangeAttack;
             var pedestal0 = MatrixFightingPlace[(int)coordinate.x, (int)coordinate.y];
             pedestal0.GetComponent<Pedestal>().Mat.SetFloat("_orangeRange", 1);
-            for (int i = 1; i <= attackRange; i++)
+
+            List<Pedestal> attR = new List<Pedestal>();
+
+            for (int i = 0; i <= attackRange; i++)
             {
                 // top
                 int radius = (int)attackRange - i;
                 int x = (int)coordinate.x + i;
                 int y = (int)coordinate.y;
-                ActivePedestalPerRadius(x, y, radius, false);
+                ActivePedestalAttackPerRadius(x, y, radius, false, ref attR);
 
                 // bottom
                 x = (int)coordinate.x - i;
                 y = (int)coordinate.y;
-                ActivePedestalPerRadius(x, y, radius, false);
+                ActivePedestalAttackPerRadius(x, y, radius, false, ref attR);
 
                 //left
                 x = (int)coordinate.x;
                 y = (int)coordinate.y + i;
-                ActivePedestalPerRadius(x, y, radius, true);
+                ActivePedestalAttackPerRadius(x, y, radius, true, ref attR);
 
                 //right
                 x = (int)coordinate.x;
                 y = (int)coordinate.y - i;
-                ActivePedestalPerRadius(x, y, radius, true);
+                ActivePedestalAttackPerRadius(x, y, radius, true, ref attR);
 
             }
-
-
+            foreach (var item in attR)
+            {
+                characterTmp.AddAttackRange(item);
+            }
         }
     }
 
-    private void ActivePedestalPerRadius(int x, int y, int radius, bool vertical)
+    private void ActivePedestalAttackPerRadius(int x, int y, int radius, bool vertical, ref List<Pedestal> attR)
     {
         if (x >= 0 && x < ROW && y >= 0 && y < COLUMN)
         {
@@ -165,7 +168,7 @@ public class GameManager : MonoBehaviour
                     var tmpX = x;
                     tmpX += ra;
                     ra--;
-                    SetActivePedestal(tmpX, y);
+                    SetActivePedestal(tmpX, y, ref attR);
                 }
                 // down
                 ra = radius;
@@ -174,9 +177,9 @@ public class GameManager : MonoBehaviour
                     var tmpX = x;
                     tmpX -= ra;
                     ra--;
-                    SetActivePedestal(tmpX, y);
+                    SetActivePedestal(tmpX, y, ref attR);
                 }
-                SetActivePedestal(x, y);
+                SetActivePedestal(x, y, ref attR);
             }
             else
             {
@@ -187,7 +190,7 @@ public class GameManager : MonoBehaviour
                     var tmpY = y;
                     tmpY += ra;
                     ra--;
-                    SetActivePedestal(x, tmpY);
+                    SetActivePedestal(x, tmpY, ref attR);
                 }
                 // right
                 ra = radius;
@@ -196,25 +199,26 @@ public class GameManager : MonoBehaviour
                     var tmpY = y;
                     tmpY -= ra;
                     ra--;
-                    SetActivePedestal(x, tmpY);
+                    SetActivePedestal(x, tmpY, ref attR);
                 }
-                SetActivePedestal(x, y);
+                SetActivePedestal(x, y, ref attR);
             }
         }
     }
 
-    private void SetActivePedestal(int x, int y)
+    private void SetActivePedestal(int x, int y, ref List<Pedestal> attR)
     {
         if (x >= 0 && x < ROW && y >= 0 && y < COLUMN)
         {
             var pedestal = MatrixFightingPlace[x, y].GetComponent<Pedestal>();
             if (!pedestal.IsHovering)
             {
-                pedestal.EnablePedestalColor(Pedestal.ORANGE_HIGHLIGHT);
+                pedestal.IsInAttackRange = true;
+                attR.Add(pedestal);
             }
             else
             {
-                pedestal.DisablePedestalColor(Pedestal.ORANGE_HIGHLIGHT);
+                pedestal.IsInAttackRange = false;
             }
         }
     }
@@ -223,7 +227,7 @@ public class GameManager : MonoBehaviour
     {
         if (oldHover != null && oldHover.name != objTr.name)
         {
-            oldHover.GetComponent<Pedestal>().DisablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
+            //oldHover.GetComponent<Pedestal>().DisablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
             //oldHover.GetChild(0).GetComponent<MeshRenderer>().material.SetFloat("_orangeRange", 1);
             oldHover.GetComponent<Pedestal>().IsHovering = false;
         }
@@ -231,27 +235,27 @@ public class GameManager : MonoBehaviour
 
         if (objTr.tag != "pedestal" && oldHover != null && oldHover.tag == "pedestal")
         {
-            oldHover.GetComponent<Pedestal>().DisablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
+            //oldHover.GetComponent<Pedestal>().DisablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
             oldHover.GetComponent<Pedestal>().IsHovering = false;
         }
 
         if (objTr.tag == "pedestal")
         {
-            objTr.GetComponent<Pedestal>().EnablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
+            //objTr.GetComponent<Pedestal>().EnablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
             objTr.GetComponent<Pedestal>().IsHovering = true;
             oldHover = objTr;
         }
     }
 
-    void ResetColorFightPlace()
+    public void ResetColorFightPlace()
     {
         foreach (var cell in MatrixFightingPlace)
         {
             var pedestal = cell.transform.GetComponent<Pedestal>();
             if (!pedestal.IsHovering)
             {
-                pedestal.DisablePedestalColor(Pedestal.ORANGE_HIGHLIGHT);
-                pedestal.DisablePedestalColor(Pedestal.BLUE_HIGHLIGHT);
+                pedestal.IsInAttackRange = false;
+                pedestal.IsInMoveRange = false;
             }
         }
     }
@@ -259,21 +263,35 @@ public class GameManager : MonoBehaviour
     public void SetActiveMoveRange(float x, float y)
     {
         var chars = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (var cell in MatrixFightingPlace)
+        {
+            var pedestal = cell.transform.GetComponent<Pedestal>();
+            if (pedestal.IsInMoveRange)
+            {
+
+                pedestal.IsInMoveRange = false;
+            }
+        }
+
         foreach (var character in chars)
         {
             Character c = character.GetComponent<Character>();
             if (c.Coordinate.x == x && c.Coordinate.y == y)
             {
+                c.IsSelected = true;
                 SetActiveMoveRange(x, y, c.RangeMove);
-
-                break;
+            }
+            else
+            {
+                c.IsSelected = false;
             }
         }
     }
 
     private void SetActiveMoveRange(float x, float y, uint rangeMove)
     {
-        for (int i = 1; i <= rangeMove; i++)
+        for (int i = 0; i <= rangeMove; i++)
         {
             float curX = x;
             float curY = y;

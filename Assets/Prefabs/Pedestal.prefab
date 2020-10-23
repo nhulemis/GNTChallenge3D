@@ -60,6 +60,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee3b7083b891e94fa2ab99643269f09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MOVE_HIGHLIGHT: {r: 0, g: 6.465219, b: 7.032368, a: 0}
+  ATTACK_HIGHLIGHT: {r: 4.234361, g: 0.2183931, b: 4.6347895, a: 0}
+  NORMAL_COLOR: {r: 0.24422836, g: 0.509434, b: 0.18022428, a: 0}
 --- !u!1 &3087577943107639594
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,7 +91,7 @@ Transform:
   m_GameObject: {fileID: 3087577943107639594}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.00000023842, y: 0, z: -0.00000011921}
-  m_LocalScale: {x: 0.09, y: 0.0816703, z: 0.09}
+  m_LocalScale: {x: 0.095, y: 0.95, z: 0.095}
   m_Children: []
   m_Father: {fileID: 2341896461586996096}
   m_RootOrder: 0
@@ -163,9 +166,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7481752355508205338}
+  - component: {fileID: 4708311720414059520}
   m_Layer: 0
   m_Name: Point
-  m_TagString: Untagged
+  m_TagString: PointSpawn
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,12 +182,25 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5129527263498547153}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2341896461586996096}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &4708311720414059520
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5129527263498547153}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.03
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5276537649004981160
 GameObject:
   m_ObjectHideFlags: 0

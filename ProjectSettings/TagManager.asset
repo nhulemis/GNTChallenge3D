@@ -8,6 +8,7 @@ TagManager:
   - CameraHolder
   - pedestal
   - Enemies
+  - PointSpawn
   layers:
   - Default
   - TransparentFX

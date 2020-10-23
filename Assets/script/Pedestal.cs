@@ -1,10 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Pedestal : MonoBehaviour
 {
-    public const string BLUE_HIGHLIGHT = "_blueRange";
+    [ColorUsage(true, true)]
+    public Color MOVE_HIGHLIGHT;
+
+    [ColorUsage(true, true)]
+    public Color ATTACK_HIGHLIGHT;
+
+    [ColorUsage(true, true)]
+    public Color NORMAL_COLOR;
     public const string ORANGE_HIGHLIGHT = "_orangeRange";
     public const string ALPHA = "_alpha";
 
@@ -22,6 +30,7 @@ public class Pedestal : MonoBehaviour
     public bool IsInAttackRange { get; set; }
     public bool IsHovering { get; set; }
 
+    private Transform point;
     private GameManager GameManager { get; set; }
 
     // Start is called before the first frame update
@@ -33,6 +42,8 @@ public class Pedestal : MonoBehaviour
         IsInMoveRange = false;
         Mat = transform.GetChild(0).GetComponent<MeshRenderer>().material;
         GameManager = GameManager.Instance;
+        Mat.SetColor("_color", NORMAL_COLOR);
+        point = transform.GetChild(1).transform;
     }
 
     // Update is called once per frame
@@ -52,6 +63,12 @@ public class Pedestal : MonoBehaviour
                     {
                         OnSelected();
                     }
+                    else if (hit.transform == transform)
+                    {
+                        CheckMoveCharacter();
+                        IsSelected = false;
+                        transform.GetChild(2).GetComponent<ParticleSystem>().Stop();
+                    }
                     else
                     {
                         IsSelected = false;
@@ -60,34 +77,66 @@ public class Pedestal : MonoBehaviour
                 }
             }
         }
-        if (GameManager.currentTurn == GameManager.Turn.Player)
+
+        if (!IsInMoveRange && !IsInAttackRange)
         {
-            Mat.SetFloat(ALPHA, 0.4f);
+            EnablePedestalColor(NORMAL_COLOR);
         }
-        else
+
+        if (IsInAttackRange)
         {
-            Mat.SetFloat(ALPHA, 0.1f);
+            EnablePedestalColor(ATTACK_HIGHLIGHT);
         }
 
         if (IsInMoveRange)
         {
-            DisablePedestalColor(ORANGE_HIGHLIGHT);
-            EnablePedestalColor(BLUE_HIGHLIGHT);
+            EnablePedestalColor(MOVE_HIGHLIGHT);
         }
-        
+
+        if (IsHovering)
+        {
+            EnablePedestalColor(MOVE_HIGHLIGHT + ATTACK_HIGHLIGHT);
+        }
+
+
+
+    }
+
+    private void CheckMoveCharacter()
+    {
+        Debug.Log("hello");
+        var chars = GameObject.FindGameObjectsWithTag("Player");
+        Character c = null;
+
+        foreach (var character in chars)
+        {
+            Character ct = character.GetComponent<Character>();
+            if (ct.IsSelected)
+            {
+                c = ct;
+            }
+        }
+
+        if (c != null && this.IsInMoveRange)
+        {
+            PlayerO = Player.Player;
+            c.Run(point, Coordinate);
+        }
     }
 
     public void OnSelected()
     {
+        GameManager.ResetColorFightPlace();
         IsSelected = true;
-        IsInMoveRange = true;
         transform.GetChild(2).GetComponent<ParticleSystem>().Play();
         GameManager.SetActiveMoveRange(Coordinate.x, Coordinate.y);
     }
 
-    public void EnablePedestalColor(string name)
+
+
+    public void EnablePedestalColor(Color name)
     {
-        Mat.SetFloat(name, 1);
+        Mat.SetColor("_color", name);
     }
     public void DisablePedestalColor(string name)
     {

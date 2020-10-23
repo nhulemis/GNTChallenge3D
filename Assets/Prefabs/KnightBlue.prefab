@@ -469,6 +469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RangeAttack: 1
   RangeMove: 3
+  CharacterParty: 0
 --- !u!1 &2980776048373578927
 GameObject:
   m_ObjectHideFlags: 0
