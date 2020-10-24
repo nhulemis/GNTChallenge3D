@@ -13,8 +13,9 @@ public class GameManager : MonoBehaviour
     public bool IsEditingPTeam { get; set; }
     public bool IsEndGame { get; set; }
     //===========================Player Model======================
-    public GameObject PKnightPrefab;
-    public GameObject PmagePrefab;
+    public GameObject char1;
+    public GameObject char2;
+    public GameObject char3;
 
     //===========================Enemies Model======================
     public GameObject EKnightPrefab;
@@ -42,16 +43,23 @@ public class GameManager : MonoBehaviour
     public void InitCharacter()
     {
         var localPlayer = MatrixFightingPlace[0, 0];
-        PKnightPrefab.transform.position = localPlayer.transform.position;
-        PKnightPrefab.GetComponent<Character>().Coordinate = new Vector2(0, 0);
+        char1.transform.position = localPlayer.transform.position;
+        char1.GetComponent<Character>().Coordinate = new Vector2(0, 0);
         localPlayer.transform.GetComponent<Pedestal>().PlayerO = Pedestal.Player.Player;
 
         var localPlayer2 = MatrixFightingPlace[2, 2];
 
-        PmagePrefab.transform.position = localPlayer2.transform.position;
-        PmagePrefab.GetComponent<Character>().CharacterParty = Character.Party.Player;
-        PmagePrefab.GetComponent<Character>().Coordinate = new Vector2(2, 2);
+        char2.transform.position = localPlayer2.transform.position;
+        char2.GetComponent<Character>().CharacterParty = Character.Party.Player;
+        char2.GetComponent<Character>().Coordinate = new Vector2(2, 2);
         localPlayer2.transform.GetComponent<Pedestal>().PlayerO = Pedestal.Player.Player;
+
+        var localPlayer3 = MatrixFightingPlace[0, 1];
+
+        char3.transform.position = localPlayer3.transform.position;
+        char3.GetComponent<Character>().CharacterParty = Character.Party.Player;
+        char3.GetComponent<Character>().Coordinate = new Vector2(0, 1);
+        localPlayer3.transform.GetComponent<Pedestal>().PlayerO = Pedestal.Player.Player;
 
         var bot = MatrixFightingPlace[ROW - 1, COLUMN - 1];
         EKnightPrefab.transform.position = bot.transform.position;
@@ -108,6 +116,15 @@ public class GameManager : MonoBehaviour
             ResetColorFightPlace();
         }
 
+        if (GameManager.Instance.currentTurn == GameManager.Turn.None)
+        {
+            var chars = GameObject.FindGameObjectsWithTag("Player");
+            foreach (var item in chars)
+            {
+                item.GetComponent<Character>().Attack(0, 0);
+            }
+            GameManager.Instance.currentTurn = Turn.Enemies;
+        }
     }
 
     private void SetActiveAttackRange()

@@ -63,14 +63,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Three kingdoms - Macho\scripts\PlayerController.cs" />
     <Compile Include="Assets\script\ButtonListener.cs" />
     <Compile Include="Assets\script\CameraControl.cs" />
     <Compile Include="Assets\script\Character.cs" />
     <Compile Include="Assets\script\GameManager.cs" />
     <Compile Include="Assets\script\Pedestal.cs" />
     <Compile Include="Assets\script\SpawnPedestal.cs" />
+    <None Include="Assets\Casual RPG Character - 8 Ekard\readme.txt" />
     <None Include="Assets\materials\License premium.txt" />
     <None Include="Assets\materials\License free.txt" />
+    <None Include="Assets\Three kingdoms - Macho\shaders\FXParticleAddtive.shader" />
+    <None Include="Assets\Three kingdoms - Macho\shaders\FXParticleZTestAlways.shader" />
+    <None Include="Assets\Three kingdoms - Macho\readme.txt" />
+    <None Include="Assets\Three kingdoms - Macho\FX\Shader\ToOnFXParticleAlpha.shader" />
+    <None Include="Assets\JJ_Oriental Fantasy Character - Berserker Grade 0_v1.1\Readme.txt" />
     <Reference Include="UnityEngine">
       <HintPath>E:/Program/Unity3D/2019.4.1f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
