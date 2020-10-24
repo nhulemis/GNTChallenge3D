@@ -16,6 +16,10 @@ public class Pedestal : MonoBehaviour
     public const string ORANGE_HIGHLIGHT = "_orangeRange";
     public const string ALPHA = "_alpha";
 
+    public Transform[] SpawnVFXs;
+    public float speedVfx = 2f;
+    int indexVFX = 0;
+
     public enum Player
     {
         NONE = 0,
@@ -33,6 +37,9 @@ public class Pedestal : MonoBehaviour
     private Transform point;
     private GameManager GameManager { get; set; }
 
+    public GameObject particleSystemSelected;
+    private ParticleSystem ptcSystem;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,6 +51,10 @@ public class Pedestal : MonoBehaviour
         GameManager = GameManager.Instance;
         Mat.SetColor("_color", NORMAL_COLOR);
         point = transform.GetChild(1).transform;
+
+        ptcSystem = particleSystemSelected.GetComponent<ParticleSystem>();
+        particleSystemSelected.transform.position = SpawnVFXs[indexVFX].position;
+        indexVFX++;
     }
 
     // Update is called once per frame
@@ -95,7 +106,34 @@ public class Pedestal : MonoBehaviour
 
         if (IsHovering)
         {
-            EnablePedestalColor(MOVE_HIGHLIGHT + ATTACK_HIGHLIGHT);
+            EnablePedestalColor(MOVE_HIGHLIGHT + ATTACK_HIGHLIGHT + NORMAL_COLOR);
+        }
+
+
+
+        // enable VFX
+        if (PlayerO == Player.Player && !IsSelected && GameManager.currentTurn == GameManager.Turn.Player)
+        {
+            particleSystemSelected.SetActive(true);
+        }
+        else
+        {
+            particleSystemSelected.SetActive(false);
+        }
+
+        // run VFX
+        float step = speedVfx * Time.deltaTime; // calculate distance to move
+        particleSystemSelected.transform.position = Vector3.MoveTowards(particleSystemSelected.transform.position, SpawnVFXs[indexVFX].position, step);
+
+        // Check if the position of the cube and sphere are approximately equal.
+        var distance = Vector3.Distance(particleSystemSelected.transform.position, SpawnVFXs[indexVFX].position);
+        if (distance < 0.01f)
+        {
+            indexVFX++;
+            if (indexVFX >= 4)
+            {
+                indexVFX = 0;
+            }
         }
 
 

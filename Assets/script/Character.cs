@@ -70,13 +70,8 @@ public class Character : MonoBehaviour
 
                 // Check if the position of the cube and sphere are approximately equal.
                 var distance = Vector3.Distance(transform.position, targetTurn.position);
-                Debug.Log("distance: " + distance);
-                if (distance < 0.14f)
+                if (distance < 0.25f)
                 {
-                    Debug.Log("Dis");
-
-                    // Swap the position of the cylinder.
-                    //targetTurn.position *= -1.0f;
                     Idle();
                 }
             }
