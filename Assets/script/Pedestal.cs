@@ -104,7 +104,6 @@ public class Pedestal : MonoBehaviour
 
     private void CheckMoveCharacter()
     {
-        Debug.Log("hello");
         var chars = GameObject.FindGameObjectsWithTag("Player");
         Character c = null;
 

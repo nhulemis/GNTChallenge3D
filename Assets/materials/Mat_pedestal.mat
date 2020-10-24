@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Mat_pedestal
-  m_Shader: {fileID: -6465566751694194690, guid: c90355451fac5cf4bb97e4e11fac112a,
+  m_Shader: {fileID: -6465566751694194690, guid: 36351e970962b8a45b2004b17cc962d5,
     type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 2

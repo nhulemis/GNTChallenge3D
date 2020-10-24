@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2341896461586996096}
   - component: {fileID: 2341896461586996099}
-  - component: {fileID: 2061841586038672481}
+  - component: {fileID: 8899648922324834185}
   m_Layer: 0
   m_Name: Pedestal
   m_TagString: pedestal
@@ -48,7 +48,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2061841586038672481
+--- !u!114 &8899648922324834185
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,12 +57,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2341896461586996098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ee3b7083b891e94fa2ab99643269f09, type: 3}
+  m_Script: {fileID: 11500000, guid: c20459749059ac448ac7be053d1f210d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MOVE_HIGHLIGHT: {r: 0, g: 6.465219, b: 7.032368, a: 0}
-  ATTACK_HIGHLIGHT: {r: 4.234361, g: 0.2183931, b: 4.6347895, a: 0}
-  NORMAL_COLOR: {r: 0.24422836, g: 0.509434, b: 0.18022428, a: 0}
+  MOVE_HIGHLIGHT: {r: 7.027451, g: 2.3215687, b: 0, a: 0}
+  ATTACK_HIGHLIGHT: {r: 0, g: 1.3176471, b: 4, a: 0}
+  NORMAL_COLOR: {r: 1.8901961, g: 1.8901961, b: 1.8901961, a: 0}
 --- !u!1 &3087577943107639594
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +122,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6866222bdf7f51f4084f9c8273d898f6, type: 2}
+  - {fileID: 2100000, guid: 7988230e079686740a88dfcf53842587, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
