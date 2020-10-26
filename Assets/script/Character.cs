@@ -43,52 +43,63 @@ public class Character : MonoBehaviour
         targetTurn = transform;
         AttackRanges = new List<Pedestal>();
         Idle();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (StateC == State.run)
+        //if (GameManager.Instance.currentTurn == GameManager.Turn.Player)
         {
-            var relativePos = targetTurn.position - transform.position;
-
-            // The step size is equal to speed times frame time.
-            float singleStep = 7f * Time.deltaTime;
-
-            // Rotate the forward vector towards the target direction by one step
-            Vector3 newDirection = Vector3.RotateTowards(transform.forward, relativePos, singleStep, 0.0f);
-
-            // the second argument, upwards, defaults to Vector3.up
-            Quaternion rotation = Quaternion.LookRotation(newDirection);
-            transform.rotation = rotation;
-            if (deltaTimeWaitRotate <= Time.time)
+            if (StateC == State.run)
             {
-                //move
-                float step = 2f * Time.deltaTime; // calculate distance to move
-                transform.position = Vector3.MoveTowards(transform.position, targetTurn.position, step);
+                var relativePos = targetTurn.position - transform.position;
 
-                // Check if the position of the cube and sphere are approximately equal.
-                if (Vector3.Distance(transform.position, targetTurn.position) < 0.001f)
+                // The step size is equal to speed times frame time.
+                float singleStep = 15f * Time.deltaTime;
+
+                // Rotate the forward vector towards the target direction by one step
+                Vector3 newDirection = Vector3.RotateTowards(transform.forward, relativePos, singleStep, 0.0f);
+
+                // the second argument, upwards, defaults to Vector3.up
+                Quaternion rotation = Quaternion.LookRotation(newDirection);
+                transform.rotation = rotation;
+
+                //if (deltaTimeWaitRotate <= Time.time)
                 {
-                    Debug.Log("Dis");
-                    
-                    // Swap the position of the cylinder.
-                    //targetTurn.position *= -1.0f;
-                    Idle();
+                    //move
+                    float step = 3f * Time.deltaTime; // calculate distance to move
+                    transform.position = Vector3.MoveTowards(transform.position, targetTurn.position, step);
+
+                    // Check if the position of the cube and sphere are approximately equal.
+                    var distance = Vector3.Distance(transform.position, targetTurn.position);
+                    if (distance < 0.25f)
+                    {
+                        Idle();
+                    }
                 }
             }
-
         }
 
-       
+        if (StateC == State.Idle)
+        {
+            transform.position = targetTurn.position;
+        }
+
+    }
+
+    public void Attack(float x, float y)
+    {
+        Anim.SetTrigger("Attack");
     }
 
     public void Run(Transform transf, Vector2 coordinate)
     {
         StateC = State.run;
-        Anim.SetTrigger("Run");
+        Anim.SetBool("Moving", true);
+
         GameManager.Instance.MatrixFightingPlace[(int)Coordinate.x, (int)Coordinate.y].GetComponent<Pedestal>().PlayerO = Pedestal.Player.NONE;
-        
+
         var pedestals = GameObject.FindGameObjectsWithTag("pedestal");
 
         foreach (var item in pedestals)
@@ -104,30 +115,20 @@ public class Character : MonoBehaviour
                 pe.IsInAttackRange = false;
             }
         }
-        
+
         Coordinate = coordinate;
         //GameManager.Instance.MatrixFightingPlace[(int)Coordinate.x, (int)Coordinate.y].GetComponent<Pedestal>().IsInAttackRange = true;
         targetTurn = transf;
 
-        deltaTimeWaitRotate = Time.time + 0.3f;
+        deltaTimeWaitRotate = Time.time + 0.5f;
     }
 
     public void Idle()
     {
         int rand = Random.Range(0, 3);
         StateC = State.Idle;
-        if (rand == 0)
-        {
-            Anim.SetTrigger("I1");
-        }
-        else if (rand == 1)
-        {
-            Anim.SetTrigger("I2");
-        }
-        else if (rand == 2)
-        {
-            Anim.SetTrigger("I3");
-        }
+        Anim.SetBool("Moving", false);
+
     }
 
     public void AddAttackRange(Pedestal go)

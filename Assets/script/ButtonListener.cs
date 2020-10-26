@@ -25,7 +25,7 @@ public class ButtonListener : MonoBehaviour
         }
         else
         {
-            GameManager.Instance.currentTurn = GameManager.Turn.Enemies;
+            GameManager.Instance.currentTurn = GameManager.Turn.None;
         }
 
     }
